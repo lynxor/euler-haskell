@@ -19,7 +19,7 @@ orderedMinus xs _ = xs
 probER :: (Integral a) => a -> [a]
 probER a = filter (\p -> a `mod` p == 0) (erastothenes a)
                          
--- Call like this: "newMethod 13195"
+-- Call like this: "largestPrime 13195"
 largestPrime :: (Integral a) => a -> a           
 largestPrime  number = tester ( number `div` (head $ probER number))
   where tester p | p == 1 = number 
