@@ -4,6 +4,8 @@ primegen = gen [] 2
                            then item: (gen (item:acc) (item+1))
                          else gen acc (item+1)  
           isPrime [] item = True 
-          isPrime acc item = not $ foldl (\tf p -> tf || (item `mod` p == 0)) False  acc
+          isPrime acc item = not $ any (\p -> item `mod` p == 0) acc
 
 problem7 a = primegen !! (a-1)
+
+
