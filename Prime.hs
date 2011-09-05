@@ -1,5 +1,6 @@
 module Prime
 ( erastothenes
+, erastothenes'
 , largestPrime
 , orderedMinus
 , smallestPrime
@@ -10,6 +11,14 @@ erastothenes a = 2 : sieve [3,5 .. a]
   where sieve [] = [] 
         sieve (x:xs) = x : (sieve $ xs `orderedMinus` [x*x, x*x+2*x..a])
         
+-- Infinite version
+erastothenes' :: (Integral a) => [a]
+erastothenes' = 2 : sieve [3,5 .. ]
+  where sieve [] = [] 
+        sieve (x:xs) = x : (sieve $ xs `orderedMinus` [x*x, x*x+2*x..])
+
+
+
 orderedMinus (x:xs) (y:ys) = case (compare x y) of 
   LT -> x: orderedMinus xs (y:ys)
   EQ -> orderedMinus xs ys
