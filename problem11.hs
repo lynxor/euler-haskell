@@ -8,11 +8,24 @@ findGreatest list = foldl foldFunc 0 (tails list)
         prodFour l = product $ take 4 l
 
 horiz :: String -> [[Int]]
-horiz q = (map read).lines
+horiz q = map ((map read).words) (lines q)
 
 vert :: String -> [[Int]]
 vert q = transpose $ horiz q
 
-diagr :: String -> Int -> [[Int]]
-diagr q len = map (calcCol (horiz q)) (map (\l -> zip [1..] l) (horiz q))
-  where calcCol horizq (ind, val) = map (\i -> (horizq !! ind) !! i) [ind, ind+1 .. len]
+diag :: [[Int]] -> Int -> [[Int]]
+diag horizq rlen  = map (mapZipped horizq) (tails [0 .. (rlen-1)])
+  where mapZipped horizq indexes = map (\(ind, list) -> list !! ind) (zip indexes horizq)
+
+problem11 :: String -> Int -> Int
+problem11 q dim = foldl foldFunc 0 allLines
+   where allLines = (horiz q) ++ (vert q) ++ diagr ++ diagl 
+         diagr = (diag (horiz q) dim) ++ (diag (vert q) dim)
+         diagl = (diag (map reverse (horiz q)) dim) ++ (diag (map reverse (vert q)) dim) 
+         foldFunc max item = if (findGreatest item) > max 
+                               then findGreatest item
+                             else max
+
+main = do 
+  content <- readFile "problem11_number"
+  putStrLn $ show (problem11 content 20)
